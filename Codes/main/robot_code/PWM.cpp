@@ -1,23 +1,23 @@
 #include "PWM.h"
 
-void PWM_Control(int dutyCicle, int direcao, int roda) {
+void PWM_Control(double dutyCicle, int roda) {
   //direcao 0 = horario; direcao 1 = anti-horario
   //roda 0 = roda do OCR0; roda 1 = roda do OCR2
   int valor = dutyCicle * 2.5;
   if (roda == 0) {
-    if (direcao == 0) {
+    if (dutyCicle >= 0) {
        OCR0A = 0;
        OCR0B = valor;
     } else {
-       OCR0A = valor;
+       OCR0A = -valor;
        OCR0B = 0;
     }
   } else {
-    if (direcao == 0) {
+    if (dutyCicle >= 0) {
        OCR2A = 0;
        OCR2B = valor;
     } else {
-       OCR2A = valor;
+       OCR2A = -valor;
        OCR2B = 0;
     }
   }

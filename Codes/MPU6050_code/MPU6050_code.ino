@@ -22,7 +22,8 @@ double GetAngle(double* last_output, double a)
   int16_t AcX=Wire.read()<<8|Wire.read();    
   int16_t AcY=Wire.read()<<8|Wire.read();  
   int16_t AcZ=Wire.read()<<8|Wire.read();
-
+  Serial.println(AcX);
+  Serial.println(AcZ);
   // Conversion to double
   double X = (double) AcX;
   double Z = (double) AcZ;

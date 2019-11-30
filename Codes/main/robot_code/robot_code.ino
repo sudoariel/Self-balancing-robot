@@ -20,12 +20,14 @@ int16_t AcX, AcY, AcZ, GyX, GyY, GyZ;
 int main()
 {
     init(); // Inicializa o core do microcontrolador
+    Serial.begin(9600);
     PWM_Init(); // Inicializa parametrizações do PWM
     MPU6050_Init(MPU_ADDRESS); // Inicializa parametrizações do MPU6050
     while (1) 
     {
       double error = MPU6050_GetAngle(MPU_ADDRESS, &last_value, filter_a);
       double output = KP * error;
+      Serial.println(output);
       PWM_Control(output, 1);
       PWM_Control(output, 0);
     }

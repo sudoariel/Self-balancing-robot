@@ -35,7 +35,9 @@ double MPU6050_GetAngle(int address, double* last_output, double a)
   int16_t AcX=Wire.read()<<8|Wire.read();    
   int16_t AcY=Wire.read()<<8|Wire.read();  
   int16_t AcZ=Wire.read()<<8|Wire.read();
-
+  if(AcX == -1 && AcZ == -1)
+    return 0;
+    
   // Conversion to double
   double X = (double) AcX;
   double Z = (double) AcZ;

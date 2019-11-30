@@ -12,6 +12,9 @@
 double filter_a = MPU6050_GetFilterConstant(FILTER_WC, FILTER_TS);
 double last_value = 0;
 
+//PID Controller parameters
+#define KP 1.0
+
 int16_t AcX, AcY, AcZ, GyX, GyY, GyZ;
 
 int main()
@@ -21,14 +24,9 @@ int main()
     MPU6050_Init(MPU_ADDRESS); // Inicializa parametrizações do MPU6050
     while (1) 
     {
-      //MPU6050_GetAngle(MPU_ADDRESS, &last_value, double a);
-      PWM_Control(50, 1);
-      _delay_ms(3000);
-      PWM_Control(-50, 1);
-      _delay_ms(3000);
-      PWM_Control(25, 1);
-      _delay_ms(3000);
-      PWM_Control(-25, 1);
-      _delay_ms(3000);
+      double error = MPU6050_GetAngle(MPU_ADDRESS, &last_value, filter_a);
+      double output = KP * error;
+      PWM_Control(output, 1);
+      PWM_Control(output, 0);
     }
 }

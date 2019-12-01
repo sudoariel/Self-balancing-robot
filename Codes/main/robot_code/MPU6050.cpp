@@ -25,8 +25,9 @@ double MPU6050_GetFilterConstant(double wc, double ts)
   return (wc * ts) / (1 + ((wc * ts)));
 }
 
-double MPU6050_GetAngle(int address, double* last_output, double a)
+double MPU6050_GetAngle(int address, double a)
 {
+  static double last_output = 0;
   //Get raw data from MPU6050
   Wire.beginTransmission(address); // Inicia transmissão de dados para o MPU6050
   Wire.write(0x3B); // Seleciona o registrador que contém os valores do acelerômetro e giroscópio
@@ -35,7 +36,7 @@ double MPU6050_GetAngle(int address, double* last_output, double a)
   int16_t AcX=Wire.read()<<8|Wire.read();    
   int16_t AcY=Wire.read()<<8|Wire.read();  
   int16_t AcZ=Wire.read()<<8|Wire.read();
-  if(AcX == -1 && AcZ == -1)
+  if(AcX == -1 && AcZ == -1 || AcZ < -10000)
     return 0;
     
   // Conversion to double
@@ -46,8 +47,8 @@ double MPU6050_GetAngle(int address, double* last_output, double a)
   double angle = atan2(X,Z) * 90 / M_PI_2;
   
   // Filtering
-  double output = a * angle + (1 - a) * *last_output;
+  double output = a * angle + (1 - a) * last_output;
    
-  *last_output = output;     
+  last_output = output;     
   return output;  
 }

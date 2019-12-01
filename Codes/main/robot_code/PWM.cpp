@@ -36,3 +36,15 @@ void PWM_Init()
   OCR2A = 0;
   OCR2B = 0;
 }
+
+void Motor_Control(double Speed)
+{
+  Speed /= 2;
+  if(Speed > 50)
+    Speed = 50;
+  if(Speed < -50)
+    Speed = -50;
+   
+  PWM_Control(Speed, 0);
+  PWM_Control(Speed * 1.3, 1);
+}
